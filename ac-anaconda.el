@@ -27,37 +27,25 @@
 (require 'auto-complete)
 (require 'anaconda-mode)
 
-(defun ac-anaconda-available ()
-  "Return t if `anaconda-mode' completions are available."
-  (and (eq major-mode 'python-mode)
-       (anaconda-mode-running-p)))
-
 (defun ac-anaconda-candidates ()
   "Obtain candidates list from anaconda."
-  (--map (propertize (plist-get it :name) 'item it)
+  (--map (popup-make-item (plist-get it :name)
+                          :document (plist-get it :doc)
+                          :summary (plist-get it :type))
          (anaconda-mode-complete)))
 
-(defun ac-anaconda-get-property (property candidate)
-  "Return the property PROPERTY of completion candidate CANDIDATE."
-  (let ((item (get-text-property 0 'item candidate)))
-    (plist-get item property)))
-
-(defun ac-anaconda-doc (candidate)
-  "Return documentation buffer for chosen CANDIDATE."
-  (ac-anaconda-get-property :doc candidate))
+;;;###autoload
+(ac-define-source anaconda
+  '((candidates . ac-anaconda-candidates)
+    (symbol . "a")))
 
 ;;;###autoload
 (defun ac-anaconda-setup ()
   "Set up `ac-sources' for `anaconda-mode'."
-  (push 'ac-source-anaconda ac-sources))
-
-;;;###autoload
-(defconst ac-source-anaconda
-  '((available . ac-anaconda-available)
-    (candidates . ac-anaconda-candidates)
-    (document . ac-anaconda-doc)
-    (symbol . "a"))
-  "`auto-complete' completion source for `anaconda-mode'.")
+  (interactive)
+  (push 'ac-source-anaconda ac-sources)
+  (unless auto-complete-mode
+    (auto-complete-mode)))
 
 (provide 'ac-anaconda)
 
