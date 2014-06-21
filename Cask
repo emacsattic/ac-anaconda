@@ -1,6 +1,6 @@
 (source melpa)
 
-(package-file "company-anaconda.el")
+(package-file "ac-anaconda.el")
 
 (development
  (depends-on "cask")

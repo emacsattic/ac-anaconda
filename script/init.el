@@ -10,11 +10,11 @@
 
 (setq anaconda-mode-debug t)
 
-;; Company settings.
+;; Auto complete settings.
 
-(global-company-mode)
+(require 'ac-anaconda)
 
-(add-to-list 'company-backends 'company-anaconda)
+(add-hook 'python-mode-hook 'ac-anaconda-setup)
 
 ;; Pyenv settings.
 

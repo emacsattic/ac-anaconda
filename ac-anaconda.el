@@ -1,12 +1,11 @@
-;;; company-anaconda.el --- Anaconda backend for company-mode
+;;; ac-anaconda.el --- Anaconda sources for auto-complete-mode
 
-;; Copyright (C) 2013, 2014 by Malyshev Artem
+;; Copyright (C) 2014 by Malyshev Artem
 
 ;; Authors: Malyshev Artem <proofit404@gmail.com>
-;;          Fredrik Bergroth <fbergroth@gmail.com>
-;; URL: https://github.com/anaconda-mode/company-anaconda
+;; URL: https://github.com/anaconda-mode/ac-anaconda
 ;; Version: 0.1.0
-;; Package-Requires: ((company "0.8.0") (anaconda-mode "0.1.0") (cl-lib "0.5.0"))
+;; Package-Requires: ((auto-complete "1.4.0") (anaconda-mode "0.1.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -25,75 +24,41 @@
 
 ;;; Code:
 
-(require 'cl-lib)
-(require 'company)
+(require 'auto-complete)
 (require 'anaconda-mode)
 
-(defvar company-anaconda-compact-annotation t
-  "Show only the first character of type in annotations.")
-
-(defun company-anaconda-init ()
-  "Initialize company-anaconda buffer."
-  (anaconda-mode-start-node)
-  (setq-local company-tooltip-align-annotations t))
-
-(defun company-anaconda-prefix ()
-  "Grab prefix at point.
-Properly detect strings, comments and attribute access."
+(defun ac-anaconda-available ()
+  "Return t if `anaconda-mode' completions are available."
   (and (eq major-mode 'python-mode)
-       (anaconda-mode-running-p)
-       (not (company-in-string-or-comment))
-       (or (company-grab-symbol-cons "\\." 1)
-           'stop)))
+       (anaconda-mode-running-p)))
 
-(defun company-anaconda-candidates ()
+(defun ac-anaconda-candidates ()
   "Obtain candidates list from anaconda."
   (--map (propertize (plist-get it :name) 'item it)
          (anaconda-mode-complete)))
 
-(defun company-anaconda-get-property (property candidate)
+(defun ac-anaconda-get-property (property candidate)
   "Return the property PROPERTY of completion candidate CANDIDATE."
   (let ((item (get-text-property 0 'item candidate)))
     (plist-get item property)))
 
-(defun company-anaconda-doc-buffer (candidate)
+(defun ac-anaconda-doc (candidate)
   "Return documentation buffer for chosen CANDIDATE."
-  (let ((doc (company-anaconda-get-property :doc candidate)))
-    (and doc (anaconda-mode-doc-buffer doc))))
-
-(defun company-anaconda-meta (candidate)
-  "Return short documentation string for chosen CANDIDATE."
-  (company-anaconda-get-property :info candidate))
-
-(defun company-anaconda-annotation (candidate)
-  "Return annotation string for chosen CANDIDATE."
-  (let ((annotation (company-anaconda-get-property :type candidate)))
-    (if company-anaconda-compact-annotation
-        (substring annotation 0 1)
-      annotation)))
-
-(defun company-anaconda-location (candidate)
-  "Return location (path . line) for chosen CANDIDATE."
-  (-when-let* ((path (company-anaconda-get-property :path candidate))
-               (line (company-anaconda-get-property :line candidate)))
-    (cons path line)))
+  (ac-anaconda-get-property :doc candidate))
 
 ;;;###autoload
-(defun company-anaconda (command &optional arg)
-  "Anaconda backend for company-mode.
-See `company-backends' for more info about COMMAND and ARG."
-  (interactive (list 'interactive))
-  (cl-case command
-    (init (company-anaconda-init))
-    (interactive (company-begin-backend 'company-anaconda))
-    (prefix (company-anaconda-prefix))
-    (candidates (company-anaconda-candidates))
-    (doc-buffer (company-anaconda-doc-buffer arg))
-    (meta (company-anaconda-meta arg))
-    (annotation (company-anaconda-annotation arg))
-    (location (company-anaconda-location arg))
-    (sorted t)))
+(defun ac-anaconda-setup ()
+  "Set up `ac-sources' for `anaconda-mode'."
+  (push 'ac-source-anaconda ac-sources))
 
-(provide 'company-anaconda)
+;;;###autoload
+(defconst ac-source-anaconda
+  '((available . ac-anaconda-available)
+    (candidates . ac-anaconda-candidates)
+    (document . ac-anaconda-doc)
+    (symbol . "a"))
+  "`auto-complete' completion source for `anaconda-mode'.")
 
-;;; company-anaconda.el ends here
+(provide 'ac-anaconda)
+
+;;; ac-anaconda.el ends here
