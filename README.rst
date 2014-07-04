@@ -21,6 +21,6 @@ Add ``ac-source-anaconda`` to allowed ``ac-sources`` list
 
     (add-hook 'python-mode-hook 'ac-anaconda-setup)
 
-.. _Anaconda: https://github.com/anaconda-mode/anaconda-mode
+.. _Anaconda: https://github.com/proofit404/anaconda-mode
 .. _auto-complete-mode: https://github.com/auto-complete/auto-complete
 .. _Melpa: http://melpa.milkbox.net/
