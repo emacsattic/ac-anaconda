@@ -34,7 +34,6 @@
                           :summary (plist-get it :type))
          (anaconda-mode-complete)))
 
-;;;###autoload
 (ac-define-source anaconda
   '((candidates . ac-anaconda-candidates)
     (symbol . "a")))
