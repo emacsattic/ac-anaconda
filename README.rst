@@ -1,5 +1,10 @@
-Auto-complete anaconda
-======================
+.. |melpa| image:: http://melpa.org/packages/ac-anaconda-badge.svg
+    :target: http://melpa.org/#/ac-anaconda
+    :alt: Melpa
+
+==============================
+Auto-complete anaconda |melpa|
+==============================
 
 Anaconda_ source for auto-complete-mode_.
 
