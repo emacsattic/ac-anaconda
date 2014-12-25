@@ -2,9 +2,11 @@
     :target: http://melpa.org/#/ac-anaconda
     :alt: Melpa
 
-==============================
-Auto-complete anaconda |melpa|
-==============================
+======================
+Auto-complete anaconda
+======================
+
+|melpa|
 
 Anaconda_ source for auto-complete-mode_.
 
