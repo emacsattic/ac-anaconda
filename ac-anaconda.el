@@ -1,8 +1,8 @@
 ;;; ac-anaconda.el --- Anaconda sources for auto-complete-mode
 
-;; Copyright (C) 2014-2015 by Malyshev Artem
+;; Copyright (C) 2014-2015 by Artem Malyshev
 
-;; Author: Malyshev Artem <proofit404@gmail.com>
+;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/ac-anaconda
 ;; Version: 0.1.0
 ;; Package-Requires: ((auto-complete "1.4.0") (anaconda-mode "0.1.0") (dash "2.6.0"))
