@@ -1,4 +1,4 @@
-;;; ac-anaconda.el --- Anaconda sources for auto-complete-mode
+;;; ac-anaconda.el --- Anaconda sources for auto-complete-mode  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2015 by Artem Malyshev
 
@@ -30,15 +30,25 @@
 (require 'anaconda-mode)
 
 (defun ac-anaconda-candidates ()
-  "Obtain candidates list from anaconda."
-  (--map (popup-make-item (plist-get it :name)
-                          :document (plist-get it :doc)
-                          :summary (plist-get it :type))
-         (anaconda-mode-complete)))
+  "Send `anaconda-mode' complete request."
+  (anaconda-mode-call "complete" 'ac-anaconda-candidates-callback)
+  nil)
+
+(defun ac-anaconda-candidates-callback (result)
+  "Obtain candidates list from RESULT."
+  (let ((ac-sources `(((candidates . ,(lambda ()
+                                        (--map (popup-make-item (cdr (assoc 'name it))
+                                                :document (cdr (assoc 'docstring it))
+                                                :summary (if (equal "statement" (cdr (assoc 'type it)))
+                                                             "statement"
+                                                           (cdr (assoc 'description it))))
+                                               result)))
+                       (symbol . "a"))
+                      ,@(cdr ac-sources))))
+    (ac-start)))
 
 (ac-define-source anaconda
-  '((candidates . ac-anaconda-candidates)
-    (symbol . "a")))
+  '((candidates . ac-anaconda-candidates)))
 
 ;;;###autoload
 (defun ac-anaconda-setup ()
