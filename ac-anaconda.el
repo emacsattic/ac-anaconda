@@ -5,7 +5,7 @@
 ;; Author: Artem Malyshev <proofit404@gmail.com>
 ;; URL: https://github.com/proofit404/ac-anaconda
 ;; Version: 0.1.0
-;; Package-Requires: ((auto-complete "1.4.0") (anaconda-mode "0.1.0") (dash "2.6.0"))
+;; Package-Requires: ((auto-complete "1.4.0") (anaconda-mode "0.1.1") (dash "2.6.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
